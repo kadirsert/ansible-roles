@@ -1,0 +1,74 @@
+---
+
+# This role copies and installs suitable rpm packages for node
+
+- name: "copy tzdata rpms to RedHat 5 systems"
+  copy: src={{ role_path }}/redhat5/{{ item }} dest=/tmp/ owner=root mode=0644
+  with_items:
+     - tzdata-2016g-2.el5.x86_64.rpm
+     - tzdata-java-2016g-2.el5.x86_64.rpm
+  when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "5"
+
+- name: "install tzdata rpms to RedHat 5 systems"
+  shell: rpm -Uvh --nosignature "{{ item }}" chdir=/tmp/
+  with_items:
+     - tzdata-2016g-2.el5.x86_64.rpm
+     - tzdata-java-2016g-2.el5.x86_64.rpm
+  when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "5"
+
+- name: "copy tzdata rpms to RedHat 6 systems"
+  copy: src={{ role_path }}/redhat6/{{ item }} dest=/tmp/ owner=root mode=0644
+  with_items:
+     - tzdata-2016g-2.el6.noarch.rpm
+     - tzdata-java-2016g-2.el6.noarch.rpm
+  when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "6"
+
+- name: "install tzdata rpms to RedHat 6 systems"
+  shell: rpm -Uvh --nosignature "{{ item }}" chdir=/tmp/
+  with_items:
+     - tzdata-2016g-2.el6.noarch.rpm
+     - tzdata-java-2016g-2.el6.noarch.rpm
+  when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "6"
+
+- name: "copy tzdata rpms to RedHat 7 systems"
+  copy: src={{ role_path }}/redhat7/{{ item }} dest=/tmp/ owner=root mode=0644
+  with_items:
+     - tzdata-2016g-2.el7.noarch.rpm
+     - tzdata-java-2016g-2.el7.noarch.rpm
+  when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "7"
+
+- name: "install tzdata rpms to RedHat 7 systems"
+  shell: rpm -Uvh --nosignature "{{ item }}" chdir=/tmp/
+  with_items:
+     - tzdata-2016g-2.el7.noarch.rpm
+     - tzdata-java-2016g-2.el7.noarch.rpm
+  when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "7"
+
+- name: "copy tzdata rpms to OEL 5 systems"
+  copy: src={{ role_path }}/oel5/{{ item }} dest=/tmp/ owner=root mode=0644
+  with_items:
+     - tzdata-2016g-2.el5.x86_64.rpm
+     - tzdata-java-2016g-2.el5.x86_64.rpm
+  when: ansible_distribution == "OracleLinux" and ansible_distribution_major_version == "5"
+
+- name: "install tzdata rpms to OEL 5 systems"
+  shell: rpm -Uvh --nosignature "{{ item }}" chdir=/tmp/
+  with_items:
+     - tzdata-2016g-2.el5.x86_64.rpm
+     - tzdata-java-2016g-2.el5.x86_64.rpm
+  when: ansible_distribution == "OracleLinux" and ansible_distribution_major_version == "5"
+
+- name: "copy tzdata rpms to OEL 6 systems"
+  copy: src={{ role_path }}/oel6/{{ item }} dest=/tmp/ owner=root mode=0644
+  with_items:
+     - tzdata-2016g-2.el6.noarch.rpm
+     - tzdata-java-2016g-2.el6.noarch.rpm
+  when: ansible_distribution == "OracleLinux" and ansible_distribution_major_version == "6"
+
+- name: install tzdata rpms to OEL 6 systems
+  shell: rpm -Uvh --nosignature "{{ item }}" chdir=/tmp/
+  with_items:
+     - tzdata-2016g-2.el6.noarch.rpm
+     - tzdata-java-2016g-2.el6.noarch.rpm
+  when: ansible_distribution == "OracleLinux" and ansible_distribution_major_version == "6"
+  
