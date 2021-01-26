@@ -1,3 +1,5 @@
+**Ansible role for getting hardware inventory**
+
 This is an ansible role that collect OS Version; HardWare Model,Vendor,Serial; IP; CPU; RAM; Disk and Mount information.
 
 Run with:
