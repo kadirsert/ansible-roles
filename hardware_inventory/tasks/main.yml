@@ -1,0 +1,66 @@
+---
+# This role prints CPU, Memory and Local Disk information for nodes
+
+- name: Collect only facts returned by facter
+  setup:
+    gather_subset:
+      - all
+  tags:
+    - gatherFacts
+
+- name: disk_models file
+  template: src=disk_models.j2 dest=/tmp/disk_models
+
+- name: IP Address
+  debug: msg="{{ ansible_hostname }} => IP = {{ ansible_default_ipv4.address }}"
+  tags:
+    - ip_address
+
+- name: HW Vendor
+  debug: msg="{{ ansible_hostname }} => HW-VENDOR = {{ ansible_system_vendor }}"
+  tags:
+    - hw_vendor
+
+- name: HW Model
+  debug: msg="{{ ansible_hostname }} => HW-MODEL = {{ ansible_product_name }}"
+  tags:
+    - hw_model
+
+- name: HW Serial
+  debug: msg="{{ ansible_hostname }} => HW-SERIAL = {{ ansible_product_serial }}"
+  tags:
+    - hw_serial
+
+- name: CPU
+  debug: msg="{{ ansible_hostname }} => CPU = {{ ansible_processor_count }}x{{ ansible_processor_cores }} ; MODEL = {{ ansible_processor.1 }}"
+  tags:
+    - cpu
+
+- name: Memory
+  debug: msg="{{ ansible_hostname }} => MEMORY = {{ ansible_memtotal_mb }} MB"
+  tags:
+    - memory
+
+- name: OS Release
+  debug: msg="{{ ansible_hostname }} => OS = {{ ansible_distribution }} {{ ansible_distribution_version }}"
+  tags:
+    - os_release
+
+- name: Local Disks
+  script: list_local_disks.sh
+  register: local_disks
+  tags:
+    - local_disks
+
+- name: Print Local Disks
+  debug: msg="{{ ansible_hostname }} => DISK = {{ item.split('|')[0] }} ; MODEL = {{ item.split('|')[1] }} ; SIZE = {{ item.split('|')[2] }}"
+  with_items: "{{ local_disks.stdout_lines }}"
+  tags:
+    - local_disks
+
+- name: Disk Mounts
+  debug: msg="{{ ansible_hostname }} => MOUNT = {{ ansible_mounts[item.0]['mount'] }} ; TOTAL_SIZE = {{ ansible_mounts[item.0]['size_total'] }} Bytes ; AVAILABLE_SIZE = {{ ansible_mounts[item.0]['size_available'] }} Bytes"
+  with_indexed_items: "{{ ansible_mounts }}"
+  tags:
+    - mounts
+   
