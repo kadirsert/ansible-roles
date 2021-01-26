@@ -1,0 +1,32 @@
+---
+# This role contains virt-install command to create kvm guests on the host machine
+
+- name: list of kvm guests
+  virt: command=list_vms
+  register: kvm_guests
+
+- include: ks_template.yml
+  vars:
+    guest_name: "{{ item.name }}"
+    kickstart_network: "{{ item.kickstart.network }}"
+    kickstart_url: "{{ item.kickstart.url }}"
+  with_items: "{{ guests_to_create }}"
+
+- name: create kvm guest
+  command: virt-install
+            --name {{ item.name }}
+            --ram {{ item.rammb }}
+            --vcpus {{ item.vcpu }}
+            --disk size={{item.disk.sizegb}},path={{item.disk.path}}/{{item.name}}.img,sparse={{item.disk.is_sparse}},bus={{item.disk.bus}},format={{item.disk.format}}
+            --network=bridge:{{ item.network.br }}
+            --graphics {{ item.graphics }}
+            --initrd-inject=/tmp/ks_{{item.name}}.cfg
+            --extra-args="ks=file:/ks_{{item.name}}.cfg ksdevice={{item.extra_args.ksdevice}} ip={{item.extra_args.ip.ip}}::{{item.extra_args.ip.gateway}}:{{item.extra_args.ip.netmask}}:{{item.extra_args.ip.hostname}}:{{item.extra_args.ip.interface}}:{{item.extra_args.ip.autoconf}}"
+            --location {{ item.location }}
+            --os-type {{ item.os.type }}
+            --os-variant {{ item.os.variant }}
+            --hvm
+            --virt-type {{ item.virt_type }}
+            --noautoconsole
+  when: item.name not in kvm_guests.list_vms
+  with_items: "{{ guests_to_create }}"

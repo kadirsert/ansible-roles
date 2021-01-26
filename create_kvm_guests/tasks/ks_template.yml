@@ -1,0 +1,2 @@
+- name: create kickstart config file for each guest
+  template: src=ks_cfg.j2 dest="/tmp/ks_{{guest_name}}.cfg"

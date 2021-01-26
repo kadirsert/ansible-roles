@@ -1,0 +1,61 @@
+---
+guests_to_create:
+    - name: TestRhel65
+      virt_type: kvm
+      location: http://example1.com/installation_tree/RHEL6.5
+      os:
+        type: linux
+        variant: rhel6
+      vcpu: 1
+      rammb: 1024
+      disk:
+        sizegb: 10
+        path: /vms_dir
+        is_sparse: yes
+        bus: virtio
+        format: raw
+      network:
+        br: br0
+      graphics: vnc
+      extra_args:
+        ksdevice: eth0
+        ip:
+          ip: 192.168.1.2
+          gateway: 192.168.1.1
+          netmask: 255.255.255.0
+          hostname: testrhel65.example1.com
+          interface: eth0
+          autoconf: none
+      kickstart:
+        network: network --bootproto=static --device=eth0 --ip=192.168.1.2 --netmask=255.255.255.0 --gateway=192.168.1.1 --nameserver=192.168.1.100
+        url: http://example1.com/installation_tree/RHEL6.5
+
+    - name: TestRhel67
+      virt_type: kvm
+      location: http://example1.com/installation_tree/RHEL6.7
+      os:
+        type: linux
+        variant: rhel6
+      vcpu: 1
+      rammb: 1024
+      disk:
+        sizegb: 10
+        path: /vms_dir
+        is_sparse: yes
+        bus: virtio
+        format: raw
+      network:
+        br: br0
+      graphics: vnc
+      extra_args:
+        ksdevice: eth0
+        ip:
+          ip: 192.168.1.3
+          gateway: 192.168.1.1
+          netmask: 255.255.255.0
+          hostname: testrhel67.example1.com
+          interface: eth0
+          autoconf: none
+      kickstart:
+        network: network --bootproto=static --device=eth0 --ip=192.168.1.3 --netmask=255.255.255.0 --gateway=192.168.1.1 --nameserver=192.168.1.100
+        url: http://example1.com/installation_tree/RHEL6.7

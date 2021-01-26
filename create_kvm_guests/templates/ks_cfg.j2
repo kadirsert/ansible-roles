@@ -1,0 +1,49 @@
+#platform=x86, AMD64, or Intel EM64T
+#version=DEVEL
+# Firewall configuration
+firewall --disabled
+# Install OS instead of upgrade
+install
+# Use network installation
+url --url={{ kickstart_url }}
+# Root password
+rootpw --iscrypted $3$Y6dUdykl$Du99k/qIeVBeASDLUcdlm.
+# System authorization information
+auth  --useshadow  --passalgo=sha512
+# Use graphical install
+graphical
+# System keyboard
+keyboard us
+# System language
+lang en_US.UTF-8
+# SELinux configuration
+selinux --disabled
+# Do not configure the X Window System
+skipx
+# Installation logging level
+logging --level=info
+
+# System timezone
+timezone UTC
+# Network information
+#network --bootproto=dhcp --device=eth0 --onboot=on
+#network --bootproto=static --device=eth0 --ip=192.168.1.2 --netmask=255.255.255.0 --gateway=192.168.1.1 --nameserver=192.168.1.3
+{{ kickstart_network }}
+# System bootloader configuration
+bootloader --location=mbr
+# Partition clearing information
+zerombr
+clearpart --drives=vda  --all
+autopart
+firstboot --disabled
+reboot
+
+%packages
+@base
+@compat-libraries
+@directory-client
+@graphical-admin-tools
+@system-admin-tools
+@system-management-snmp
+
+%end
